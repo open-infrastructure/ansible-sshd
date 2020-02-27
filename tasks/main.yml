@@ -1,0 +1,22 @@
+---
+# main sshd tasks
+
+- name: Check os compatability with this role
+  assert:
+    that: "ansible_os_family|lower in sshd__supported_os_families"
+    msg: "{{ ansible_os_family }} is probably not supported by this role"
+  tags: [sshd]
+
+- name: Include os specific variables
+  include_vars: "{{ ansible_os_family|lower }}.yml"
+  tags: [sshd]
+
+- name: Install dependencies required by this role
+  import_tasks: install.yml
+  become: true
+  tags: [sshd]
+
+- name: Configure sshd
+  import_tasks: configure.yml
+  become: true
+  tags: [sshd]

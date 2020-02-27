@@ -1,0 +1,56 @@
+{{ ansible_managed|comment(decoration="# ") }}
+
+AddressFamily {{ sshd__address_family }}
+AcceptEnv {{ sshd__accept_env|join(' ') }}
+AllowAgentForwarding {{ 'yes' if sshd__allow_agent_forwarding else 'no' }}
+
+{% if sshd__allow_groups %}
+AllowGroups {{ sshd_allow_groups|join(' ') }}
+{% endif %}
+
+{% if sshd__allow_users %}
+AllowUsers {{ sshd__allow_users|join(' ') }}
+{% endif %}
+
+AuthenticationMethods {{ sshd__authentication_methods|join(',') }}
+AuthorizedKeysFile {{ sshd__authorized_keys_file }}
+
+Banner {{ sshd__banner_file }}
+
+ClientAliveInterval {{ sshd__client_alive_interval }}
+Ciphers {{ sshd__ciphers|join(',') }}
+Compression {{ 'yes' if sshd__compression else 'no' }}
+
+{% if sshd__deny_groups %}
+DenyGroups {{ sshd__deny_groups|join(' ') }}
+{% endif %}
+
+HostbasedAuthentication {{ 'yes' if sshd__hostbased_authentication else 'no' }}
+
+{% for hostkey in sshd__host_keys %}
+HostKey {{ hostkey }}
+{% endfor %}
+
+KexAlgorithms {{ sshd__kex_algorithms|join(',') }}
+
+{% for listen_address in sshd__listen_addresses %}
+ListenAddress {{ listen_address }}
+{% endfor %}
+
+LogLevel {{ sshd__log_level }}
+MACs {{ sshd__macs|join(',') }}
+MaxAuthTries {{ sshd__max_auth_tries }}
+PasswordAuthentication {{ 'yes' if sshd__password_authentication else 'no' }}
+PermitEmptyPasswords {{ 'yes' if sshd__permit_empty_passwords else 'no' }}
+PermitRootLogin {{ 'yes' if sshd__permit_root_login else 'no' }}
+Port {{ sshd__port }}
+PrintMotd {{ 'yes' if sshd__print_motd else 'no' }}
+PubkeyAuthentication {{ 'yes' if sshd__pubkey_authentication else 'no' }}
+
+{% for subsystem in sshd__subsystems %}
+Subsystem  {{ subsystem }}
+{% endfor %}
+
+SyslogFacility {{ sshd__syslog_facility }}
+TCPKeepAlive {{ 'yes' if sshd__tcp_keep_alive else 'no' }}
+X11Forwarding {{ 'yes' if sshd__x11_forwarding else 'no' }}

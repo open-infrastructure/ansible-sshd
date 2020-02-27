@@ -1,0 +1,75 @@
+---
+# defaults for ansible-role-openssh-server
+
+sshd__supported_os_families: [debian]
+sshd__system_packages: []
+sshd__generate_dh_params: false  # if false use pregenerated ones: files/moduli
+sshd__banner_text: |
+  *        .              .   *
+                  .                    *
+      *     '       *          .
+                       ( {{ inventory_hostname }} )
+          * .    '     ( Please authenticate )
+                       (     or go away      )
+      ' .                      /  .   *
+                 .-'~~~~'-.   /
+      .      .-~´\__/  \__/`~-.         .
+           .-~   (oo)  (oo)    ~-.
+          (_____//~~\\//~~\\______)
+     _.-~`                         `~-._
+    /O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O\     *
+    \___________________________________/.
+      JRO      \x x x x x x x/            `.
+       .  *     \x_x_x_x_x_x/.    '  .     ___   .
+                 `.           `.         .'| \'.
+                   `.     .     `.       | \ / |
+      ' .     *                          '.___.'
+
+
+# sshd.conf
+sshd__address_family: any
+sshd__accept_env:
+  - LANG
+  - LC_ALL
+  - TERM
+sshd__allow_agent_forwarding: false
+sshd__allow_groups: []  # default: allow all groups
+sshd__allow_users: []  # default: allow all users (besides root ...)
+sshd__authentication_methods: [publickey]
+sshd__authorized_keys_file: .ssh/authorized_keys
+sshd__banner_file: /etc/ssh/banner.txt
+sshd__client_alive_interval: 180  # internet in germany in shitty, so be generous
+sshd__ciphers:  # give A+ on sshaudit and goes beyond Mozilla recommendations
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+sshd__compression: true
+sshd__deny_groups: []
+sshd__hostbased_authentication: false
+sshd__host_keys:
+  - /etc/ssh/ssh_host_ed25519_key
+sshd__kex_algorithms:
+  - curve25519-sha256@libssh.org
+sshd__listen_addresses:
+  - 0.0.0.0
+  - '::'
+sshd__log_level: INFO
+sshd__macs:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - umac-128-etm@openssh.com
+sshd__max_auth_tries: 3
+sshd__password_authentication: false
+sshd__permit_empty_passwords: false
+sshd__permit_root_login: false
+sshd__port: 22
+sshd__print_motd: true
+sshd__pubkey_authentication: true
+sshd__subsystems:
+  - 'sftp internal-sftp'
+sshd__syslog_facility: AUTH
+sshd__tcp_keep_alive: true
+sshd__x11_forwarding: false

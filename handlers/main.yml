@@ -1,0 +1,41 @@
+---
+
+- name: Validate sshd configuration
+  listen: validate sshd configuration
+  shell: "{{ sshd__binary }} -T 2>&1"
+  changed_when: false
+  ignore_errors: true
+  register: sshd__config_test
+  become: true
+  notify:
+    - restart sshd
+
+- name: Display output of sshd configuration test
+  listen: validate sshd configuration
+  debug:
+    msg: "{{ sshd__config_test.stdout }}"
+  failed_when: "sshd__config_test is failed"
+
+- name: Restart sshd
+  listen:
+    - validate sshd configuration
+    - restart sshd
+  service:
+    name: sshd
+    state: restarted
+  become: true
+  async: 1
+  poll: 0
+
+- name: Wait for sshd to restart
+  listen:
+    - validate sshd configuration
+    - restart sshd
+  wait_for:
+    port: "{{ sshd__port }}"
+    host: "{{ ansible_host }}"
+    search_regex: OpenSSH
+    delay: 3
+    timeout: 23
+  delegate_to: localhost
+  become: false

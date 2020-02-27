@@ -1,0 +1,6 @@
+---
+
+- name: Install packages required for sshd
+  package:
+    name: "{{ sshd__system_packages }}"
+    state: present
