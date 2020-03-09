@@ -3,6 +3,7 @@
 
 sshd__supported_os_families: [debian]
 sshd__system_packages: []
+sshd__generate_dh_params: false
 sshd__banner_text: |
   ===============================================================================
   ||        _______________                             _____                  ||
@@ -58,7 +59,7 @@ sshd__macs:
 sshd__max_auth_tries: 3
 sshd__password_authentication: false
 sshd__permit_empty_passwords: false
-sshd__permit_root_login: false
+sshd__permit_root_login: true
 sshd__port: 22
 sshd__print_motd: true
 sshd__pubkey_authentication: true

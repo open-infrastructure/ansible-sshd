@@ -4,3 +4,15 @@
   copy:
     content: "{{ sshd__banner_text }}"
     dest: "{{ sshd__banner_file }}"
+
+- name: Place sshd configuration
+  template:
+    owner: root
+    group: root
+    mode: 0640
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - {src: sshd_config.j2, dest: /etc/ssh/sshd_config}
+  notify:
+    - validate sshd configuration
